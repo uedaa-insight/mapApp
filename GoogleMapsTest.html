@@ -1,0 +1,124 @@
+<html>
+  <head>
+    <title>Simple Map</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+
+    <link rel="stylesheet" type="text/css" href="./style.css" />
+    <script>
+    let map;
+	function initMap() {
+		
+		var output = document.getElementById("result");
+		if (!navigator.geolocation){//Geolocation apiがサポートされていない場合
+		output.innerHTML = "<p>Geolocationはあなたのブラウザーでサポートされておりません</p>";
+		return;
+		}
+		function success(position) {
+			var latitude  = position.coords.latitude;//緯度
+			var longitude = position.coords.longitude;//経度
+			output.innerHTML = '<p>緯度 ' + latitude + '° <br>経度 ' + longitude + '°</p>';
+			// 位置情報
+			var latlng = new google.maps.LatLng( latitude , longitude ) ;
+			// Google Mapsに書き出し
+			var map = new google.maps.Map( document.getElementById( 'map' ) , {
+				zoom: 13 ,// ズーム値
+				center: latlng ,// 中心座標
+			} ) ;
+				// マーカーの新規出力
+				new google.maps.Marker( {
+					map: map ,
+					position: latlng ,
+					
+				} ) ;
+				
+			var menberStore1 = {
+				name : "加盟店1",
+				content: "",
+				latitude: 35.1706431,
+				logitude: 136.8816945
+			}
+			var menberStore2 = {
+				name : "加盟店2",
+				content: "",
+				latitude: 35.1775272,
+				logitude: 136.8767137
+			}
+			var menberStore3 = {
+				name : "加盟店3",
+				content: "",
+				latitude: 35.1720311,
+				logitude: 136.8887318
+			}
+			
+			var menberStores= [menberStore1,menberStore2,menberStore3]
+			for(var i = 0; i < menberStores.length; i++){
+				new google.maps.Marker( {
+					map: map ,
+					position: { lat: menberStores[i].latitude, lng: menberStores[i].logitude },
+						icon: {
+						fillColor: "#FFA500",                //塗り潰し色
+						fillOpacity: 0.8,                    //塗り潰し透過率
+						path: google.maps.SymbolPath.CIRCLE, //円を指定
+						scale: 10,                           //円のサイズ
+						strokeColor: "#FF0000",              //枠の色
+						strokeWeight: 1.0                    //枠の透過率
+					},
+					label: {
+						text: '加',                           //ラベル文字
+						color: '#FF0000',                    //文字の色
+						fontSize: '10px'                     //文字のサイズ
+					} 
+				} ) ;
+			}
+		};
+		
+		function error() {
+			//エラーの場合
+			output.innerHTML = "座標位置を取得できません";
+		};
+
+		navigator.geolocation.getCurrentPosition(success, error);//成功と失敗を判断
+	}
+	window.initMap = initMap;
+    </script>
+  </head>
+  <body>
+    <div id="map"></div>
+    <div id="result"></div>
+    <div>
+    	<table border="1">
+		    <tr>
+		      <th>加盟店名</th>
+		      <th>距離</th>
+		    </tr>
+		    <tr>
+		      <td>　</td>
+		      <td>　</td>
+		    </tr>
+		    <tr>
+		      <td>　</td>
+		      <td>　</td>
+		    </tr>
+		    <tr>
+		      <td>　</td>
+		      <td>　</td>
+		    </tr>
+		    <tr>
+		      <td>　</td>
+		      <td>　</td>
+		    </tr>
+		 </table>
+    
+    </div>
+    <!--
+     The `defer` attribute causes the callback to execute after the full HTML
+     document has been parsed. For non-blocking uses, avoiding race conditions,
+     and consistent behavior across browsers, consider loading using Promises
+     with https://www.npmjs.com/package/@googlemaps/js-api-loader.
+    -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&v=weekly"
+      defer
+    ></script>
+  </body>
+</html>
